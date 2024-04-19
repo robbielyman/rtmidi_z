@@ -1,0 +1,32 @@
+* rtmidi_z
+=rtmidi_z= is a Zig interface to [[https://github.com/thestk/rtmidi][RtMidi]], a cross-platform C/C++ MIDI library.
+=rtmidi_z= provides Zig types for =RtMidi= primitives.
+
+To add this package to your project, pick a commit hash =<hash>= and run this:
+#+begin_src bash
+  $ zig fetch --save https://github.com/ryleelyman/rtmidi_z/archive/<hash>.tar.gz
+#+end_src
+
+Then in your =build.zig= you can add this:
+
+#+begin_src zig
+  const rtmidi = b.dependency("rtmidi_z", .{
+      .target = target,
+      .optimize = optimize,
+      .static = false, // builds a static RtMidi; defaults to false
+  });
+
+  // For whatever you're building; in this case let's assume it's called exe
+  exe.root_module.addImport("rtmidi", rtmidi.module("rtmidi_z"));
+#+end_src
+
+and in your source code:
+
+#+begin_src zig
+  // import
+  const rtmidi = @import("rtmidi");
+
+  // and then use it something like this...
+  const in = rtmidi.In.createDefault() orelse return error.Failed;
+  defer in.destroy();
+#+end_src
