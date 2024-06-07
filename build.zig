@@ -8,10 +8,10 @@ pub fn build(b: *std.Build) !void {
     const module = b.addModule("rtmidi_z", .{
         .target = target,
         .optimize = optimize,
-        .root_source_file = .{ .path = "lib.zig" },
+        .root_source_file = b.path("lib.zig"),
     });
     const tests = b.addTest(.{
-        .root_source_file = .{ .path = "lib.zig" },
+        .root_source_file = b.path("lib.zig"),
         .target = target,
         .optimize = optimize,
         .link_libc = true,
