@@ -103,7 +103,7 @@ pub const In = opaque {
 
     pub fn setCallback(dev: *In, comptime callback: fn (f64, []const u8, ?*anyopaque) void, user_data: ?*anyopaque) void {
         const inner = struct {
-            fn f(delta: f64, msg: ?[*]const u8, size: usize, ctx: ?*anyopaque) void {
+            fn f(delta: f64, msg: ?[*]const u8, size: usize, ctx: ?*anyopaque) callconv(.C) void {
                 @call(.always_inline, callback, .{
                     delta, if (msg) |ptr| ptr[0..size] else &.{}, ctx,
                 });
