@@ -47,6 +47,13 @@ pub fn getPortName(dev: anytype, number: usize, buf: []u8) Error!void {
     try unwrap(dev, err);
 }
 
+pub fn getPortNameLength(dev: anytype, number: usize) Error!usize {
+    var len: c_int = undefined;
+    const err = c.rtmidi_get_port_name(cast(dev), @intCast(number), null, &len);
+    try unwrap(dev, err);
+    return @intCast(len);
+}
+
 /// both In and Out pointers may be safely cast to point to this struct type
 pub const Dev = extern struct {
     ptr: ?*anyopaque,
@@ -61,6 +68,7 @@ pub const Out = opaque {
     pub const closePort = rtmidi.closePort;
     pub const getPortCount = rtmidi.getPortCount;
     pub const getPortName = rtmidi.getPortName;
+    pub const getPortNameLength = rtmidi.getPortNameLength;
     pub const getPortNameAlloc = rtmidi.getPortNameAlloc;
 
     pub fn createDefault() ?*Out {
@@ -87,6 +95,7 @@ pub const In = opaque {
     pub const closePort = rtmidi.closePort;
     pub const getPortCount = rtmidi.getPortCount;
     pub const getPortName = rtmidi.getPortName;
+    pub const getPortNameLength = rtmidi.getPortNameLength;
     pub const getPortNameAlloc = rtmidi.getPortNameAlloc;
 
     pub fn createDefault() ?*In {
