@@ -30,15 +30,16 @@ pub fn getPortCount(dev: anytype) usize {
     return c.rtmidi_get_port_count(cast(dev));
 }
 
-pub fn getPortNameAlloc(dev: anytype, allocator: std.mem.Allocator, number: usize) (std.mem.Allocator.Error || Error)![]u8 {
+pub fn getPortNameAlloc(dev: anytype, allocator: std.mem.Allocator, number: usize) (std.mem.Allocator.Error || Error)![:0]u8 {
     var len: c_int = undefined;
     const err = c.rtmidi_get_port_name(cast(dev), @intCast(number), null, &len);
     try unwrap(dev, err);
-    const buf = try allocator.alloc(u8, @intCast(len));
+    const buf = try allocator.alloc(u8, @intCast(len + 1));
     errdefer allocator.free(buf);
-    const err2 = c.rtmidi_get_port_name(dev, @intCast(number), buf.ptr, &len);
+    const err2 = c.rtmidi_get_port_name(cast(dev), @intCast(number), buf.ptr, &len);
     try unwrap(dev, err2);
-    return buf;
+    buf[@intCast(len)] = 0;
+    return buf[0..@intCast(len) :0];
 }
 
 pub fn getPortName(dev: anytype, number: usize, buf: []u8) Error!void {
