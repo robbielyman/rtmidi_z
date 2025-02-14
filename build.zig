@@ -57,12 +57,20 @@ fn compileRtMidi(b: *std.Build, target: std.Build.ResolvedTarget, optimize: std.
             lib.linkFramework("CoreMIDI");
             lib.linkFramework("CoreAudio");
             lib.linkFramework("CoreFoundation");
+            lib.linkSystemLibrary("pthread");
+            lib.defineCMacro("HAVE_LIBPTHREAD", "1");
         },
-        .linux => lib.linkSystemLibrary("asound"),
-        .windows => lib.linkSystemLibrary("winmm"),
+        .linux => {
+            lib.linkSystemLibrary("asound");
+            lib.linkSystemLibrary("pthread");
+            lib.defineCMacro("HAVE_LIBPTHREAD", "1");
+        },
+        .windows => {
+            lib.linkSystemLibrary("winmm");
+            lib.defineCMacro("HAVE_LIBPTHREAD", "0");
+        },
         else => return error.NotSupported,
     }
-    lib.linkSystemLibrary("pthread");
 
     lib.addCSourceFile(.{
         .file = .{ .dependency = .{
@@ -111,5 +119,4 @@ const macros: []const [2][]const u8 = &.{
     .{ "HAVE_DLCFN_H", "1" },
     .{ "LT_OBJDIR", "\".libs/\"" },
     .{ "HAVE_SEMAPHORE", "1" },
-    .{ "HAVE_LIBPTHREAD", "1" },
 };
