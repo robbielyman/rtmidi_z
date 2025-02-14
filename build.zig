@@ -43,7 +43,7 @@ fn compileRtMidi(b: *std.Build, target: std.Build.ResolvedTarget, optimize: std.
     lib.linkLibCpp();
 
     for (macros) |m| {
-        lib.defineCMacro(m[0], m[1]);
+        lib.root_module.addCMacro(m[0], m[1]);
     }
     const t = target.result.os.tag;
     const cpp_flags: []const []const u8 = switch (t) {
@@ -58,16 +58,16 @@ fn compileRtMidi(b: *std.Build, target: std.Build.ResolvedTarget, optimize: std.
             lib.linkFramework("CoreAudio");
             lib.linkFramework("CoreFoundation");
             lib.linkSystemLibrary("pthread");
-            lib.defineCMacro("HAVE_LIBPTHREAD", "1");
+            lib.root_module.addCMacro("HAVE_LIBPTHREAD", "1");
         },
         .linux => {
             lib.linkSystemLibrary("asound");
             lib.linkSystemLibrary("pthread");
-            lib.defineCMacro("HAVE_LIBPTHREAD", "1");
+            lib.root_module.addCMacro("HAVE_LIBPTHREAD", "1");
         },
         .windows => {
             lib.linkSystemLibrary("winmm");
-            lib.defineCMacro("HAVE_LIBPTHREAD", "0");
+            lib.root_module.addCMacro("HAVE_LIBPTHREAD", "0");
         },
         else => return error.NotSupported,
     }
