@@ -1,6 +1,7 @@
 .{
-    .name = "rtmidi_z",
+    .name = .rtmidi_z,
     .version = "6.0.0+53809fc",
+    .fingerprint = 0xcd89fd462f75e660, // Changing this has security and trust implications.
     .paths = .{
         "build.zig",
         "build.zig.zon",

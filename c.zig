@@ -1,4 +1,4 @@
-pub const CCallback = fn (f64, ?[*]const u8, usize, ?*anyopaque) callconv(.C) void;
+pub const CCallback = fn (f64, ?[*]const u8, usize, ?*anyopaque) callconv(.c) void;
 
 pub const Api = enum(c_int) { unspecified, macosx_core, linux_alsa, unix_jack, windows_mm, rtmidi_dummy, web_midi_api, windows_uwp, android, num };
 
