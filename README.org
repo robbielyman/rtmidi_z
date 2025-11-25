@@ -2,9 +2,9 @@
 =rtmidi_z= is a Zig interface to [[https://github.com/thestk/rtmidi][RtMidi]], a cross-platform C/C++ MIDI library.
 =rtmidi_z= provides Zig types for =RtMidi= primitives.
 
-To add this package to your project, pick a commit hash =<hash>= and run this:
+To add this package to your project, run this command:
 #+begin_src bash
-  $ zig fetch --save https://github.com/ryleelyman/rtmidi_z/archive/<hash>.tar.gz
+  $ zig fetch --save git+https://github.com/robbielyman/rtmidi_z
 #+end_src
 
 Then in your =build.zig= you can add this:
