@@ -9,22 +9,19 @@ pub fn build(b: *std.Build) !void {
         .target = target,
         .optimize = optimize,
         .root_source_file = b.path("lib.zig"),
+        .link_libc = true,
     });
     const tests = b.addTest(.{
-        .root_source_file = b.path("lib.zig"),
-        .target = target,
-        .optimize = optimize,
-        .link_libc = true,
+        .root_module = module,
+        .use_llvm = true,
     });
 
     if (static) {
         const lib = try compileRtMidi(b, target, optimize);
         b.installArtifact(lib);
         module.linkLibrary(lib);
-        tests.linkLibrary(lib);
     } else {
         module.linkSystemLibrary("rtmidi", .{ .needed = true });
-        tests.linkSystemLibrary("rtmidi");
     }
 
     const test_run_step = b.addRunArtifact(tests);
@@ -34,13 +31,16 @@ pub fn build(b: *std.Build) !void {
 
 fn compileRtMidi(b: *std.Build, target: std.Build.ResolvedTarget, optimize: std.builtin.OptimizeMode) !*std.Build.Step.Compile {
     const upstream = b.dependency("upstream", .{});
-    const lib = b.addStaticLibrary(.{
-        .target = target,
-        .optimize = optimize,
+    const lib = b.addLibrary(.{
         .name = "rtmidi",
+        .linkage = .static,
+        .root_module = b.createModule(.{
+            .target = target,
+            .optimize = optimize,
+            .link_libc = true,
+            .link_libcpp = true,
+        }),
     });
-    lib.linkLibC();
-    lib.linkLibCpp();
 
     for (macros) |m| {
         lib.root_module.addCMacro(m[0], m[1]);
