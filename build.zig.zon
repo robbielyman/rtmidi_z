@@ -12,7 +12,7 @@
     .dependencies = .{
         .upstream = .{
             .url = "https://github.com/thestk/rtmidi/archive/53809fc1869a9789c4631a11081c1840b6db1527.tar.gz",
-            .hash = "12201253fb51b1c24c5dbbc2d1ea6f752289dec30ae992bc35123b2da6c572d4899b",
+            .hash = "N-V-__8AABKxDgASU_tRscJMXbvC0epvdSKJ3sMK6ZK8NRI7",
         },
     },
 }
