@@ -7,10 +7,10 @@ jobs:
         os: [ubuntu-latest, macos-latest, windows-latest]
     runs-on: ${{matrix.os}}
     steps:
-      - uses: actions/checkout@v3
+      - uses: actions/checkout@v4
       - uses: mlugg/setup-zig@v2
         with:
-          version: latest
+          version: 0.16
       - run: |
           if [ "$RUNNER_OS" == "Linux" ]; then
               sudo apt-get update -y
@@ -27,8 +27,8 @@ jobs:
   check-fmt:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v3
+      - uses: actions/checkout@v4
       - uses: mlugg/setup-zig@v2
         with:
-          version: latest
+          version: 0.16
       - run: zig fmt --check .
